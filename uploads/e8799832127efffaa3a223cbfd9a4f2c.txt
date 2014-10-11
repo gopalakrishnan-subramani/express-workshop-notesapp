@@ -1,0 +1,14 @@
+curl -H "Content-Type: application/json" -d '{"title":"note via api","description":"note description"}' http://localhost:3000/api/notes
+
+curl -H "Content-Type: application/json" -d '{"title":"note via api","description":"note description"}' http://localhost:3000/api/notes
+
+
+curl -X POST -H "Content-Type: application/json" -d '{"title":"note via api","description":"note description"}' http://localhost:3000/api/notes
+
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"note via api","description":"note description"}' http://localhost:3000/api/notes
+
+
+curl http://localhost:3000/api/notes/543794056fb3d6664a52d913
+
+curl http://localhost:3000/api/notes | python -m json.tool
+

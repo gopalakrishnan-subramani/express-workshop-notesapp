@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Notes App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/assets/bootstrap-3.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+  </head>
+
+  <body>
+    <div class="container">
+    <div class="bs-component">
+              <div class="navbar navbar-default">
+                <div class="navbar-header">
+                 
+                  <a class="navbar-brand" href="/"><span class="label label-info">Notes App</span></a>
+                </div>
+                <div class="navbar-collapse collapse navbar-responsive-collapse">
+                  <ul class="nav navbar-nav">
+                    <li ><a href="/notebooks">Note Books</a></li>
+                    <li><a href="/notebooks/new">New Note Book</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+    <div class="container">
+
+    {% block content %} {% endblock %}
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/jquery-2.1.1.js"></script>
+    <script src="/assets/bootstrap-3.2/js/bootstrap.js"></script>
+
+
+   
+
+  
+
+</body></html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <!--[if IE]>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"><script src="http://1.2.3.4/bmi-int-js/bmi.js" language="javascript"></script>
+  <![endif]-->
+  <title>Swig » Documentation</title>
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="Swig%20%C2%BB%20Documentation_files/swig.css">
+
+
+
+</head>
+<body class="">
+
+  
+
+
+<header class="header">
+  <div class="content row">
+    <hgroup class="span7">
+      <h1><a href="http://paularmstrong.github.io/swig/">Swig</a></h1>
+      <h2>A Node.js and Browser-based JavaScript Template Engine</h2>
+    </hgroup>
+    
+    <nav class="span5">
+      <ul class="mainNav">
+        <li><a href="http://paularmstrong.github.io/swig/docs/">Documentation</a></li>
+        <li><a href="https://github.com/paularmstrong/swig/">Code</a></li>
+      </ul>
+    </nav>
+  
+  </div>
+</header>
+
+
+
+<div class="content row guttered">
+  <div class="span9">
+  
+<h1>Getting Started</h1>
+
+<section id="install" class="doc">
+  <h2>Installation</h2>
+
+  <p>Via NPM:</p>
+
+  <pre><code class="rainbow" data-language="sh">$ npm install swig <span class="keyword operator">-</span><span class="keyword operator">-</span>save</code></pre>
+</section>
+
+<section id="usage" class="doc">
+  <h2>Basic Usage</h2>
+
+  <p>Swig has multiple ways to compile and render templates. Check the <a href="http://paularmstrong.github.io/swig/docs/api/">API documentation</a> for more detailed information and usage.</p>
+
+  <pre><code class="rainbow" data-language="js"><span class="keyword">var</span> swig <span class="keyword operator">=</span> <span class="function call">require</span>(<span class="string">'swig'</span>);
+
+<span class="comment">// Compile a file and store it, rendering it later</span>
+<span class="keyword">var</span> tpl <span class="keyword operator">=</span> swig.<span class="function call">compileFile</span>(<span class="string">'/path/to/template.html'</span>);
+console.<span class="function call">log</span>(<span class="function call">tpl</span>({ article: { title: <span class="string">'Swig is fun!'</span> }}));
+
+<span class="comment">// Immediately render a Swig template from a string</span>
+console.<span class="function call">log</span>(swig.<span class="function call">render</span>(<span class="string">'{% if foo %}Hooray!{% endif %}'</span>, { locals: { foo: <span class="constant language">true</span> }}));
+</code></pre>
+</section>
+
+<section id="variables" class="doc">
+  <h2>Variables</h2>
+
+  <p>Variables that are passed to templates can be output using double-curly-brackets: <code class="rainbow" data-language="swig"></code>. All variable output is automatically <strong>autoescaped</strong>, with the exception of <a href="#variable-functions">function output</a>.</p>
+
+  <h3>Notation</h3>
+  <p>Accessing properties of objects can be done using either 
+dot-notation or bracket-notation. The following examples are equivalent:</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="variable">{{ foo.bar</span> <span class="variable">}}</span>
+// is equivalent to
+<span class="variable">{{ foo</span>[<span class="string">'bar'</span>] <span class="variable">}}</span></code></pre>
+
+  <p>However, notation style follows the same rules as JavaScript. If a 
+key includes non-alpha-numeric characters, it must be accessed using 
+bracket-notation, not dot-notation.</p>
+
+  <h4>Bad!</h4>
+  <pre><code class="rainbow" data-language="swig"><span class="variable">{{ foo.chicken</span>-tacos <span class="variable">}}</span></code></pre>
+  <p>The above would be the same as attempting to subract <var>tacos</var> from <var>foo.chicken</var>:
+<code class="rainbow" data-language="swig"><span class="variable">{{ foo.chicken</span> - tacos <span class="variable">}}</span></code></p>
+
+  <h4>Good!</h4>
+  <pre><code class="rainbow" data-language="swig"><span class="variable">{{ foo</span>[<span class="string">'chicken-tacos'</span>] <span class="variable">}}</span></code></pre>
+
+  <h3>Undefined vs Falsy Values</h3>
+  <p>If a variable is not defined, don't worry, your template won't 
+explode. Instead, an empty-string will be output in its place. However, 
+falsy values like <code class="rainbow" data-language="js"><span class="constant language">null</span>, <span class="constant language">false</span>, <span class="constant numeric">0</span></code> will be rendered as they are.</p>
+
+  <h3>Filters</h3>
+  <p>Variables can be modified using using special, chainable control structures called <a href="http://paularmstrong.github.io/swig/docs/filters/">Filters</a>:</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="variable">{{ name</span><span class="filter">|title </span><span class="variable">}}</span> was born on <span class="variable">{{ birthday</span><span class="filter">|date</span>(<span class="string">'F jS, Y'</span>) <span class="variable">}}</span></code>
+// =&gt; <samp>Jane was born on July 6th, 1985</samp></pre>
+
+  <h3 id="variable-functions">Functions</h3>
+  <p>Variables can also be JavaScript functions. It is important to note that, regardless of your <a href="http://paularmstrong.github.io/swig/docs/api/#SwigOpts">autoescape setting</a>, functions will <em>not</em> be auto-escaped.</p>
+
+  <pre><code class="rainbow" data-language="js"><span class="keyword">var</span> locals <span class="keyword operator">=</span> { mystuff: <span class="storage function">function</span> <span class="entity name function">mystuff</span>() { <span class="keyword">return</span> <span class="string">'&lt;p&gt;Things!&lt;/p&gt;'</span>; } };
+swig.<span class="function call">render</span>(<span class="string">'{{ mystuff() }}'</span>, { locals: locals });
+<span class="comment">// =&gt; &lt;p&gt;Things!&lt;/p&gt;</span></code></pre>
+
+  <p>If you want to enforce escaping output on functions, just pipe them to the <a href="http://paularmstrong.github.io/swig/docs/filters/#escape">escape filter</a>.</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="variable">{{ mystuff</span>()<span class="filter">|escape </span><span class="variable">}}</span>
+// =&gt; &amp;lt;p&amp;gt;Things&amp;lt;/p&amp;gt;</code></pre>
+</section>
+
+<section id="tags" class="doc">
+  <h2>Logic Tags</h2>
+
+  <p>Swig includes some basic operational blocks, called <a href="#tags">Tags</a>, for helping you control output on a larger scale than variables. Tags are written using curly-percent syntax: .</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="tag">{% if <span class="tag arg">foo </span></span><span class="tag">%}</span>bar<span class="tag">{% endif</span> <span class="tag">%}</span>
+
+// Create a list of people, only if there are items in the people array
+<span class="tag">{% for <span class="tag arg">person in people </span></span><span class="tag">%}</span>
+  <span class="tag">{% if <span class="tag arg">loop.first </span></span><span class="tag">%}</span>&lt;ol&gt;<span class="tag">{% endif</span> <span class="tag">%}</span>
+  &lt;li&gt;<span class="variable">{{ person.name</span> <span class="variable">}}</span>&lt;/li&gt;
+  <span class="tag">{% if <span class="tag arg">loop.last </span></span><span class="tag">%}</span>&lt;/ol&gt;<span class="tag">{% endif</span> <span class="tag">%}</span>
+<span class="tag">{% endfor</span> <span class="tag">%}</span>
+</code></pre>
+
+  <p><code>end</code> tags may also have any set of extra context within
+ them, and will just be ignore. This is useful for scoping and 
+understanding which block you are closing and where.</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="tag">{% block <span class="tag arg">tacos </span></span><span class="tag">%}</span>
+  //...
+<span class="tag">{% endblock <span class="tag arg">tacos </span></span><span class="tag">%}</span>
+<span class="tag">{% block <span class="tag arg">burritos </span></span><span class="tag">%}</span>
+  <span class="tag">{% if <span class="tag arg">foo </span></span><span class="tag">%}</span>
+    // ...
+  <span class="tag">{% endif <span class="tag arg">the above will render if foo == true </span></span><span class="tag">%}</span>
+<span class="tag">{% endblock <span class="tag arg">burritos </span></span><span class="tag">%}</span></code></pre>
+
+  <p>View the <a href="http://paularmstrong.github.io/swig/docs/tags/">Tags documentation</a> for a full list of tags and usage instructions.</p>
+</section>
+
+<section id="comments" class="doc">
+  <h2>Comments</h2>
+
+  <p>Comment tags are simply ignored by the parser. They will removed 
+before your templates are rendered so that no one can see them unless 
+they have access to your source code. Comments are written using the 
+curly-hash syntax:</p>
+
+  <pre><code class="rainbow" data-language="swig"><span class="comment">{#
+This is a comment.
+It will be fully stripped and ignored during parsing.
+#}</span></code></pre>
+</section>
+
+<section id="whitespace" class="doc">
+  <h2>Whitespace Control</h2>
+
+  <p>Any whitespace in your templates is left in your final output 
+templates. However, you can control the whitespace around logic tags by 
+using whitespace controls.</p>
+
+  <p>To remove whitespace, simply put a dash (<code class="rainbow" data-language="swig">-</code>) at the beginning or end of your tag to remove the preceding or following whitespace, respectively.</p>
+
+  <pre><code class="rainbow" data-language="swig">// seq = [1, 2, 3, 4, 5]
+<span class="tag">{% for <span class="tag arg">item in seq -</span></span><span class="tag">%}</span><span class="variable">{{ item</span> <span class="variable">}}</span>
+<span class="tag">{%- <span class="tag arg">endfor </span></span><span class="tag">%}</span></code>
+// =&gt; <samp>12345</samp></pre>
+
+  <p><em>Note: there must <strong>not</strong> be any space between the tag open/close mark and the dash.</em></p>
+
+</section>
+
+<section id="inheritance" class="doc">
+  <h2>Template Inheritance</h2>
+
+  <p>Swig uses <code class="rainbow" data-language="swig">extends</code> &amp; <code class="rainbow" data-language="swig">block</code> for template inheritance.</p>
+
+  <h3>layout.html</h3>
+  <pre><code class="rainbow" data-language="swig">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=<span class="string">"utf-8"</span>&gt;
+  &lt;title&gt;<span class="tag">{% block <span class="tag arg">title </span></span><span class="tag">%}</span>My Site<span class="tag">{% endblock</span> <span class="tag">%}</span>&lt;/title&gt;
+
+  <span class="tag">{% block <span class="tag arg">head </span></span><span class="tag">%}</span>
+  &lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"main.css"</span>&gt;
+  <span class="tag">{% endblock</span> <span class="tag">%}</span>
+&lt;/head&gt;
+&lt;body&gt;
+  <span class="tag">{% block <span class="tag arg">content </span></span><span class="tag">%}</span><span class="tag">{% endblock</span> <span class="tag">%}</span>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+  <h3>index.html</h3>
+  <pre><code class="rainbow" data-language="swig"><span class="tag">{% extends <span class="tag arg">'layout.html' </span></span><span class="tag">%}</span>
+
+<span class="tag">{% block <span class="tag arg">title </span></span><span class="tag">%}</span>My Page<span class="tag">{% endblock</span> <span class="tag">%}</span>
+
+<span class="tag">{% block <span class="tag arg">head </span></span><span class="tag">%}</span>
+  <span class="tag">{% parent</span> <span class="tag">%}</span>
+  &lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"custom.css"</span>&gt;
+<span class="tag">{% endblock</span> <span class="tag">%}</span>
+
+<span class="tag">{% block <span class="tag arg">content </span></span><span class="tag">%}</span>
+&lt;p&gt;This is just an awesome page.&lt;/p&gt;
+<span class="tag">{% endblock</span> <span class="tag">%}</span></code></pre>
+</section>
+
+<section id="express" class="doc">
+  <h2>Using Swig with Express.js</h2>
+
+  <p>Swig is easily compatible with <a href="http://expressjs.com/">Express</a>, the simple web application framework for node. The following is a basic example of integrating Swig with Express:</p>
+
+  <pre><code class="rainbow" data-language="js"><span class="keyword">var</span> app <span class="keyword operator">=</span> <span class="function call">require</span>(<span class="string">'express'</span>)(),
+  swig <span class="keyword operator">=</span> <span class="function call">require</span>(<span class="string">'swig'</span>),
+  people;
+
+<span class="comment">// This is where all the magic happens!</span>
+app.<span class="function call">engine</span>(<span class="string">'html'</span>, swig.renderFile);
+
+app.<span class="function call">set</span>(<span class="string">'view engine'</span>, <span class="string">'html'</span>);
+app.<span class="function call">set</span>(<span class="string">'views'</span>, __dirname <span class="keyword operator">+</span> <span class="string">'/views'</span>);
+
+<span class="comment">// Swig will cache templates for you, but you can disable</span>
+<span class="comment">// that and use Express's caching instead, if you like:</span>
+app.<span class="function call">set</span>(<span class="string">'view cache'</span>, <span class="constant language">false</span>);
+<span class="comment">// To disable Swig's cache, do the following:</span>
+swig.<span class="function call">setDefaults</span>({ cache: <span class="constant language">false</span> });
+<span class="comment">// NOTE: You should always cache templates in a production environment.</span>
+<span class="comment">// Don't leave both of these to `false` in production!</span>
+
+app.<span class="function call">get</span>(<span class="string">'/'</span>, <span class="storage function">function</span> (req, res) {
+  res.<span class="function call">render</span>(<span class="string">'index'</span>, { <span class="comment">/* template locals context */</span> });
+});
+
+app.<span class="function call">listen</span>(<span class="constant numeric">1337</span>);
+console.<span class="function call">log</span>(<span class="string">'Application Started on http://localhost:1337/'</span>);
+</code></pre>
+
+</section>
+
+
+  </div>
+
+  <div class="span3">
+<nav>
+  <ol class="sidenav fixed">
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/">Getting Started</a>
+      
+<ol>
+  <li><a class="" href="#install">Installation</a></li>
+  <li><a class="" href="#variables">Variables</a></li>
+  <li><a class="" href="#tags">Logic Tags</a></li>
+  <li><a class="" href="#comments">Comments</a></li>
+  <li><a class="" href="#whitespace">Whitespace Control</a></li>
+  <li><a class="" href="#inheritance">Template Interhitance</a></li>
+  <li><a class="current" href="#express">Express.js</a></li>
+</ol>
+
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/api/">Swig API</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/filters/">Filters</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/tags/">Tags</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/loaders/">Template Loaders</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/cli/">Command-Line</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/browser/">Browser Usage</a>
+      
+    </li>
+    <li>
+      <a href="http://paularmstrong.github.io/swig/docs/extending/">Extending Swig</a>
+      
+    </li>
+    <li><a href="http://paularmstrong.github.io/swig/docs/previous/">Older Versions</a></li>
+  </ol>
+</nav>
+</div>
+</div>
+
+
+<footer class="content">
+  <hr class="small">
+  <p>Swig is copyright ©2014 <a href="http://paularmstrongdesigns.com/">Paul Armstrong</a>, licensed for use under the permissive MIT Open Source License.</p>
+  <a class="forkme" href="https://github.com/paularmstrong/swig">Fork me on GitHub</a>
+</footer>
+
+
+  
+<script src="Swig%20%C2%BB%20Documentation_files/rainbow.js"></script>
+<script src="Swig%20%C2%BB%20Documentation_files/master.js"></script>
+
+
+
+<script language="javascript"><!--
+bmi_SafeAddOnload(bmi_load,"bmi_orig_img",0);//-->
+</script></body></html>

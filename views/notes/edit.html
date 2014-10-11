@@ -1,0 +1,63 @@
+{% extends "../layout.html" %}
+
+{% block content %}
+
+<a href="/notebooks/view/{{notebook._id.toString()}}">{{notebook.title}}</a>
+	
+{% if errors %}
+
+<div class="alert alert-warning">
+	<h4>Form Errors!</h4>
+	<p>
+		<ul>
+		{% for error in errors %}
+			<li>{{error.message}}</li>
+		{% endfor %}
+		</ul>
+	</p>
+</div>
+
+{% endif %}
+       
+<form class="form-horizontal" method='post' action='/notebooks/{{notebook._id.toString()}}/notes/save'  enctype="multipart/form-data">
+<fieldset><legend>Note</legend>
+	
+	{% if note %}
+	<input type="hidden" name="id" value="{{note._id.toString()}}">
+	{% endif %}
+
+	 <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+	<input type="hidden" name="notebook_id" value="{{notebook._id.toString()}}">
+
+	<div class="form-group {% if errors.title %} has-error {% endif %}">
+		<label for="inputTitle" class="control-label">Title</label>
+		<input type="text" name="title" class="form-control" id="inputTitle" value="{{note.title}}">
+
+		{% if errors.title %}
+		<label class="control-label" for="inputTitle">{{errors.title.message}}</label>
+		{% endif %}
+	</div>
+
+
+	<div class="form-group {% if errors.description %} has-error {% endif %}">
+		<label for="inputDescription" class="control-label">Description</label>
+ 
+		<textarea class="form-control" name="description" rows="3" id="inputDescription">{{note.description}}</textarea>
+
+		{% if errors.description %}
+		<label class="control-label" for="inputDescription">{{errors.title.description}}</label>
+		{% endif %}
+	</div>
+
+
+	<div class="form-group"><div class="col-lg-10 col-lg-offset-2">
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</div>
+
+
+</fieldset>
+</form>
+ 
+
+{% endblock %}

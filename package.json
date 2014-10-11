@@ -1,0 +1,32 @@
+{
+  "name": "notes",
+  "description": "simple notes app in express",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x", 
+    
+    "cookie-parser": "latest",
+    "body-parser": "latest",
+    "express-session": "latest",
+    "cookie-session": "latest",
+
+    "multer": "latest",
+
+    "swig": "latest",
+    
+    "underscore": "latest",
+    
+    "mongoose": "latest",
+    
+
+    "passport": "~0.2.x",
+    "passport-local": "~1.0.0",
+    
+    "validator": "latest",
+    "express-validator": "latest",
+    
+    "csurf": "latest",
+    "morgan" : "latest"
+  }
+}

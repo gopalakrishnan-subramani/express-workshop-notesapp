@@ -1,0 +1,34 @@
+{% extends "../layout.html" %}
+
+{% block content %}
+	
+	<a href="/notebooks/view/{{notebook._id.toString()}}">{{notebook.title}}</a>
+	
+	<a href="/notebooks/{{note._notebook.toString()}}/notes/edit/{{note._id.toString()}}" class="btn"> Edit</a>
+  <h2>{{note.title}}</h2>
+
+  <p>
+  {{note.description}}
+  </p>
+
+  {% if note.images.length > 0  %}
+  <h3> Files </h3>
+  <ul>
+  {% for file in note.images   %}
+  	<li><a href="/{{file}}">{{file}}</a></li>
+  {%  endfor %}
+  </ul>
+
+  {% endif %}
+
+  <form method="post" action="/notebooks/{{note._notebook.toString()}}/notes/upload/{{note._id.toString()}}"
+  	 enctype="multipart/form-data">
+
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
+ 
+  <input type="file" name="file" />
+  <input type="submit" value="upload" />
+  </form>
+ 
+
+{% endblock %}
